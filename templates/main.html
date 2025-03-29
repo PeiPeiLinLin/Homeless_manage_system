@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Homes R Us - Connecting with the Less Fortunate</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="penis.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+	<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	<style>
+		.login-header {
+			position: absolute;
+			top: 20px;
+			right: 20px;
+			z-index: 1000;
+			display: flex;
+			gap: 10px;
+		}
+		.stories-container {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			gap: 20px;
+			padding: 20px;
+		}
+		.story-card {
+			width: 300px;
+			border: 1px solid #ddd;
+			border-radius: 8px;
+			overflow: hidden;
+			box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+			position: relative;
+		}
+		.story-image {
+			width: 100%;
+			height: 200px;
+			object-fit: cover;
+		}
+		.story-content {
+			padding: 15px;
+		}
+		.like-btn {
+			background: none;
+			border: none;
+			color: #666;
+			cursor: pointer;
+			font-size: 1rem;
+			display: flex;
+			align-items: center;
+			gap: 5px;
+			margin-top: 10px;
+		}
+		.like-btn.liked {
+			color: #e74c3c;
+		}
+		.admin-actions {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			display: flex;
+			gap: 5px;
+		}
+		.admin-only {
+			display: none;
+		}
+		.logged-in .admin-only {
+			display: block;
+		}
+		#loginModal {
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0,0,0,0.7);
+			z-index: 1001;
+			justify-content: center;
+			align-items: center;
+		}
+		.modal-content {
+			background: white;
+			padding: 20px;
+			border-radius: 8px;
+			width: 300px;
+		}
+	</style>
+</head>
+<body>
+	<div id="wrapper">
+		<!-- Login Header -->
+		<div class="login-header">
+			<button id="loginBtn" class="button">Shelter Admin Login</button>
+			<div id="adminControls" class="admin-only">
+				<a href="/admin" class="button">Dashboard</a>
+				<button id="logoutBtn" class="button">Logout</button>
+			</div>
+		</div>
+
+		<!-- Login Modal -->
+		<div id="loginModal">
+			<div class="modal-content">
+				<h3>Shelter Admin Login</h3>
+				<form id="loginForm">
+					<div>
+						<label for="username">Username:</label>
+						<input type="text" id="username" required>
+					</div>
+					<div>
+						<label for="password">Password:</label>
+						<input type="password" id="password" required>
+					</div>
+					<button type="submit" class="button primary">Login</button>
+					<button type="button" id="cancelLogin" class="button">Cancel</button>
+				</form>
+			</div>
+		</div>
+
+		<!-- Main Header -->
+		<header id="header" class="alt">
+			<span class="logo"><img src="images/logo.svg" alt="" /></span>
+			<h1>Homes R Us</h1>
+			<p>Finding connections with people of the less fortunate<br>Built by: 
+				<a href="https://www.instagram.com/nsxts/">@Zonetian</a>, 
+				<a href="https://www.instagram.com/yz.8102/">@Yixuan</a>, 
+				<a href="https://www.instagram.com/linn.03_/">@Adrian</a>
+			</p>
+		</header>
+
+		<!-- Navigation -->
+		<nav id="nav">
+			<ul>
+				<li><a href="#intro" class="active">Home</a></li>
+				<li><a href="#stories">Stories</a></li>
+				<li><a href="#about">About Us</a></li>
+				<li><a href="#help">How to Help</a></li>
+				<li><a href="#contact">Contact</a></li>
+				<li class="admin-only"><a href="#add-story">Add Story</a></li>
+			</ul>
+		</nav>
+
+		<!-- Main Content -->
+		<div id="main">
+			<!-- Introduction -->
+			<section id="intro" class="main">
+				<div class="spotlight">
+					<div class="content">
+						<header class="major">
+							<h2>Our Mission</h2>
+						</header>
+						<p>Homes R Us is dedicated to sharing the stories of homeless individuals in our community, helping to build connections and understanding between those with housing and those without. Every person has a story worth hearing.</p>
+						<ul class="actions">
+							<li><a href="#stories" class="button">Read Their Stories</a></li>
+							<li class="admin-only"><a href="#add-story" class="button primary">Add New Story</a></li>
+						</ul>
+					</div>
+					<span class="image"><img src="images/pic01.jpg" alt="Community helping the homeless" /></span>
+				</div>
+			</section>
+
+			<!-- Stories Section -->
+			<section id="stories" class="main special">
+				<header class="major">
+					<h2>Their Stories</h2>
+					<p>Real people. Real struggles. Real hopes.</p>
+				</header>
+				
+				<div class="stories-container" id="storiesContainer">
+					<!-- Stories will be loaded from database via JavaScript -->
+				</div>
+				
+				<footer class="major">
+					<ul class="actions special">
+						<li><a href="#" class="button">View All Stories</a></li>
+					</ul>
+				</footer>
+			</section>
+
+			<!-- Add Story Form (Admin Only) -->
+			<section id="add-story" class="main special admin-only">
+				<header class="major">
+					<h2>Add New Story</h2>
+					<p>Share another story from your shelter</p>
+				</header>
+				<form id="storyForm">
+					<div>
+						<label for="storyName">Name:</label>
+						<input type="text" id="storyName" required>
+					</div>
+					<div>
+						<label for="storyTitle">Title:</label>
+						<input type="text" id="storyTitle" required>
+					</div>
+					<div>
+						<label for="storyContent">Story:</label>
+						<textarea id="storyContent" rows="5" required></textarea>
+					</div>
+					<div>
+						<label for="storyImage">Image URL:</label>
+						<input type="text" id="storyImage" required>
+					</div>
+					<button type="submit" class="button primary">Submit Story</button>
+				</form>
+			</section>
+
+			<!-- How to Help Section -->
+			<section id="help" class="main special">
+				<header class="major">
+					<h2>How You Can Help</h2>
+					<p>Small actions can make a big difference</p>
+				</header>
+				<ul class="features">
+					<li>
+						<span class="icon solid major style1 fa-hand-holding-heart"></span>
+						<h3>Donate</h3>
+						<p>Your financial contributions help provide meals, shelter, and resources to those in need.</p>
+					</li>
+					<li>
+						<span class="icon major style3 fa-tshirt"></span>
+						<h3>Donate Goods</h3>
+						<p>Clothing, blankets, and hygiene products are always needed.</p>
+					</li>
+					<li>
+						<span class="icon major style5 fa-hands-helping"></span>
+						<h3>Volunteer</h3>
+						<p>Give your time at local shelters or outreach programs.</p>
+					</li>
+				</ul>
+			</section>
+
+			<!-- Call to Action -->
+			<section id="cta" class="main special">
+				<header class="major">
+					<h2>Ready to Make a Difference?</h2>
+					<p>Join our community of helpers and advocates today.</p>
+				</header>
+				<footer class="major">
+					<ul class="actions special">
+						<li><a href="#" class="button primary">Donate Now</a></li>
+						<li><a href="#" class="button">Learn More</a></li>
+					</ul>
+				</footer>
+			</section>
+		</div>
+
+		<!-- Footer -->
+		<footer id="footer">
+			<section>
+				<h2>About Homes R Us</h2>
+				<p>We are a nonprofit organization dedicated to bridging the gap between the housed and unhoused communities through storytelling, advocacy, and direct assistance.</p>
+				<ul class="actions">
+					<li><a href="#" class="button">Learn More</a></li>
+				</ul>
+			</section>
+			<section>
+				<h2>Contact Us</h2>
+				<dl class="alt">
+					<dt>Address</dt>
+					<dd>1234 Compassion Way &bull; Your City, ST 00000 &bull; USA</dd>
+					<dt>Phone</dt>
+					<dd>(555) 123-4567</dd>
+					<dt>Email</dt>
+					<dd><a href="#">help@homesrus.org</a></dd>
+				</dl>
+				<ul class="icons">
+					<li><a href="#" class="icon brands fa-twitter alt"><span class="label">Twitter</span></a></li>
+					<li><a href="#" class="icon brands fa-facebook-f alt"><span class="label">Facebook</span></a></li>
+					<li><a href="#" class="icon brands fa-instagram alt"><span class="label">Instagram</span></a></li>
+				</ul>
+			</section>
+			<p class="copyright">&copy; Homes R Us. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+		</footer>
+	</div>
+
+	<!-- Scripts -->
+	<script src="assets/js/jquery.min.js"></script>
+	<script src="assets/js/jquery.scrollex.min.js"></script>
+	<script src="assets/js/jquery.scrolly.min.js"></script>
+	<script src="assets/js/browser.min.js"></script>
+	<script src="assets/js/breakpoints.min.js"></script>
+	<script src="assets/js/util.js"></script>
+	<script src="assets/js/main.js"></script>
+	
+	<!-- Custom JavaScript for Homes R Us -->
+	<script>
+		// Check if user is logged in (in a real app, this would check session/cookie)
+		let isLoggedIn = false;
+		
+		// Sample stories data (in a real app, this would come from SQL database)
+		let stories = [
+			{
+				id: 1,
+				name: "John",
+				title: "John's Journey",
+				content: "After losing his job during the pandemic, John found himself on the streets. He's been working odd jobs while searching for stable housing.",
+				image: "images/story1.jpg",
+				likes: 24,
+				isLiked: false
+			},
+			{
+				id: 2,
+				name: "Maria",
+				title: "Maria's Hope",
+				content: "A single mother of two, Maria has been living in her car while trying to maintain her children's school routine.",
+				image: "images/story2.jpg",
+				likes: 15,
+				isLiked: false
+			}
+		];
+		
+		// DOM Ready
+		$(document).ready(function() {
+			// Load stories from database
+			loadStories();
+			
+			// Login button click
+			$('#loginBtn').click(function() {
+				$('#loginModal').show();
+			});
+			
+			// Cancel login
+			$('#cancelLogin').click(function() {
+				$('#loginModal').hide();
+			});
+			
+			// Login form submission
+			$('#loginForm').submit(function(e) {
+				e.preventDefault();
+				const username = $('#username').val();
+				const password = $('#password').val();
+				
+				// In a real app, this would make an AJAX call to your backend
+				if(username === 'admin' && password === 'password') {
+					loginUser();
+				} else {
+					alert('Invalid credentials');
+				}
+			});
+			
+			// Logout button
+			$('#logoutBtn').click(function() {
+				logoutUser();
+			});
+			
+			// Story form submission
+			$('#storyForm').submit(function(e) {
+				e.preventDefault();
+				const newStory = {
+					name: $('#storyName').val(),
+					title: $('#storyTitle').val(),
+					content: $('#storyContent').val(),
+					image: $('#storyImage').val(),
+					likes: 0,
+					isLiked: false
+				};
+				
+				// In a real app, this would POST to your backend
+				addStory(newStory);
+				
+				// Reset form
+				this.reset();
+			});
+		});
+		
+		// Function to load stories
+		function loadStories() {
+			const container = $('#storiesContainer');
+			container.empty();
+			
+			// In a real app, this would fetch from your SQL database via API
+			stories.forEach(story => {
+				const storyElement = `
+					<div class="story-card" data-id="${story.id}">
+						${isLoggedIn ? `
+							<div class="admin-actions">
+								<button class="button small edit-story" data-id="${story.id}">Edit</button>
+								<button class="button small delete-story" data-id="${story.id}">Delete</button>
+							</div>
+						` : ''}
+						<img src="${story.image}" alt="${story.name}'s story" class="story-image">
+						<div class="story-content">
+							<h3>${story.title}</h3>
+							<p>${story.content}</p>
+							<button class="like-btn ${story.isLiked ? 'liked' : ''}" data-id="${story.id}">
+								<i class="fas fa-heart"></i>
+								<span class="like-count">${story.likes}</span>
+							</button>
+						</div>
+					</div>
+				`;
+				container.append(storyElement);
+			});
+			
+			// Add event listeners for like buttons
+			$('.like-btn').click(function() {
+				const storyId = $(this).data('id');
+				toggleLike(storyId);
+			});
+			
+			// Add event listeners for admin buttons
+			$('.edit-story').click(function() {
+				const storyId = $(this).data('id');
+				editStory(storyId);
+			});
+			
+			$('.delete-story').click(function() {
+				const storyId = $(this).data('id');
+				deleteStory(storyId);
+			});
+		}
+		
+		// Function to handle liking a story
+		function toggleLike(storyId) {
+			// In a real app, this would make an AJAX call to your backend
+			const story = stories.find(s => s.id === storyId);
+			if(story) {
+				if(story.isLiked) {
+					story.likes--;
+					story.isLiked = false;
+				} else {
+					story.likes++;
+					story.isLiked = true;
+				}
+				loadStories();
+			}
+		}
+		
+		// Function to add a new story
+		function addStory(story) {
+			// In a real app, this would POST to your backend
+			story.id = stories.length > 0 ? Math.max(...stories.map(s => s.id)) + 1 : 1;
+			stories.push(story);
+			loadStories();
+			alert('Story added successfully!');
+		}
+		
+		// Function to edit a story
+		function editStory(storyId) {
+			// In a real app, this would show an edit form with the story data
+			alert(`Editing story ${storyId}`);
+		}
+		
+		// Function to delete a story
+		function deleteStory(storyId) {
+			// In a real app, this would make an AJAX call to your backend
+			if(confirm('Are you sure you want to delete this story?')) {
+				stories = stories.filter(s => s.id !== storyId);
+				loadStories();
+			}
+		}
+		
+		// Function to handle user login
+		function loginUser() {
+			isLoggedIn = true;
+			$('#loginModal').hide();
+			$('#loginBtn').hide();
+			$('#adminControls').show();
+			$('body').addClass('logged-in');
+			loadStories();
+		}
+		
+		// Function to handle user logout
+		function logoutUser() {
+			isLoggedIn = false;
+			$('#loginBtn').show();
+			$('#adminControls').hide();
+			$('body').removeClass('logged-in');
+			loadStories();
+		}
+	</script>
+</body>
+</html>

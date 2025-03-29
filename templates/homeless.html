@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homeless</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <a href="/" class="logo">
+                <img src="/static/image/Helping hands.jpg" alt="Helping Hands Logo">
+            </a>
+        </div>
+        <div class="side">
+            <div class="log"><p>Current User: admin</p></div>
+            <div class="setting"><button id="settingBtn">Settings</button></div>
+            <div class="log"><button id="logoutBtn">Log out</button></div>
+        </div>
+    </div>   
+    
+    <!-- Logout Modal -->
+    <div id="logoutModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Log Out</h2>
+            <p>Are you sure you want to log out?</p>
+            <button id="logoutConfirm">Confirm</button>
+            <button id="logoutCancel">Cancel</button>
+        </div>
+    </div>
+    
+    <!-- Settings Modal -->
+    <div id="languageModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Choose a Language</h2>
+            <select id="languageSelect">
+                <option value="en">English</option>
+                <option value="zh">中文</option>
+            </select>
+            <button id="saveLangBtn">Save</button>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="sidebar">
+            <ul>
+                <li><a href="stories" data-action="viewStories">Personal Stories</a></li>
+                <li><a href="shelter.html" data-action="viewShelters">Shelters</a></li>
+                <li><a href="needs" data-action="viewNeeds">Urgent Needs</a></li>
+                <li><a href="donations" data-action="viewDonations">How to Help</a></li>
+                <li><a href="homeless.html" data-action="homeless_list">Our Homeless</a></li>
+            </ul>
+        </div>
+        
+        <div class="main_content">
+            <div class="table_block">
+                <!-- Homeless Individuals Table -->
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Current Shelter</th>
+                            <th>Health Condition</th>
+                            <th>Needs</th>
+                            <th>Homeless Level</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for person in homeless %}
+                            <tr>
+                                <td>{{ person.PeopleID }}</td>
+                                <td>{{ person.name }}</td>
+                                <td>{{ person.age }}</td>
+                                <td>{{ person.shelter.name if person.shelter else 'None' }}</td>
+                                <td>{{ person.health_condition }}</td>
+                                <td>
+                                    <button class="editHLBtn"
+                                        data-id="{{ person.id }}"
+                                        data-name="{{ person.name }}"
+                                        data-age="{{ person.age }}"
+                                        data-shelter="{{ person.shelter_id }}"
+                                        data-health="{{ person.health_condition }}"
+                                        data-story="{{ person.story }}">
+                                        Edit
+                                    </button>
+                                    <button class="deleteHLBtn" data-id="{{ person.id }}">Delete</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="adjustBtn">
+                <button id="addPersonBtn">Add New Person</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Person Modal -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>  
+            <h3>Add New Person</h3>
+            <form id="addPersonForm" action="/add_person" method="POST" enctype="multipart/form-data">
+                <label for="name">Name:</label>
+                <input type="text" id="addName" name="name" required>
+                
+                <label for="age">Age:</label>
+                <input type="number" id="addAge" name="age">
+                
+                <label for="shelter_id">Shelter:</label>
+                <select id="addShelterId" name="shelter_id">
+                    {% for shelter in shelters %}
+                        <option value="{{ shelter.id }}">{{ shelter.name }}</option>
+                    {% endfor %}
+                </select>
+                
+                <label for="health_condition">Health Condition:</label>
+                <input type="text" id="addHealth" name="health_condition">
+                
+                <label for="story">Personal Story:</label>
+                <textarea id="addStory" name="story" rows="4"></textarea>
+                
+                <label for="photo">Photo:</label>
+                <input type="file" id="addPhoto" name="photo" accept="image/*">
+                
+                <button type="submit">Add Person</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Person Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Edit Person Information</h3>
+            <form id="editPersonForm" action="/edit_person" method="POST" enctype="multipart/form-data">
+                <input type="hidden" id="editId" name="person_id">
+                
+                <label for="editName">Name:</label>
+                <input type="text" id="editName" name="name" required>
+                
+                <label for="editAge">Age:</label>
+                <input type="number" id="editAge" name="age">
+                
+                <label for="editShelterId">Shelter:</label>
+                <select id="editShelterId" name="shelter_id">
+                    {% for shelter in shelters %}
+                        <option value="{{ shelter.id }}">{{ shelter.name }}</option>
+                    {% endfor %}
+                </select>
+                
+                <label for="editHealth">Health Condition:</label>
+                <input type="text" id="editHealth" name="health_condition">
+                
+                <label for="editStory">Personal Story:</label>
+                <textarea id="editStory" name="story" rows="4"></textarea>
+                
+                <label for="editPhoto">Update Photo:</label>
+                <input type="file" id="editPhoto" name="photo" accept="image/*">
+                
+                <button type="submit">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Confirm Deletion</h3>
+            <p>Are you sure you want to delete this record?</p>
+            <form id="deletePersonForm" action="/delete_person" method="POST">
+                <input type="hidden" id="deleteId" name="person_id">
+                <button type="submit">Yes</button>
+                <button type="button" id="deleteCancel">No</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Poster Preview Modal -->
+    <div id="posterModal" class="modal">
+        <div class="modal-content" style="width: 80%; max-width: 800px;">
+            <span class="close">&times;</span>
+            <h3>Story Poster</h3>
+            <div id="posterContent">
+                <!-- Poster content will be inserted here by JavaScript -->
+            </div>
+            <div class="poster-actions">
+                <button id="printPosterBtn">Print Poster</button>
+                <button id="downloadPosterBtn">Download as PDF</button>
+                <button id="sharePosterBtn">Share on Social Media</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Helping Hands Homeless Assistance System</p>
+        <p>Contact: yzhe0128@student.monash.edu</p>
+        <p>© 2023 All Rights Reserved</p>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>

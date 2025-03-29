@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shelter Management System</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <a href="/" class="logo">
+                <img src="/static/image/Helping hands.jpg" alt="Helping Hands Logo">
+            </a>
+        </div>
+        <div class="side">
+            <div class="log"><p>Current User: admin</p></div>
+            <div class="setting"><button id="settingBtn">Settings</button></div>
+            <div class="log"><button id="logoutBtn">Logout</button></div>
+        </div>
+    </div>
+
+    <!-- Logout Confirmation Modal -->
+    <div id="logoutModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Confirm Logout</h2>
+            <p>Are you sure you want to logout?</p>
+            <button id="logoutConfirm">Confirm</button>
+            <button id="logoutCancel">Cancel</button>
+        </div>
+    </div>
+    
+    <!-- Settings Modal -->
+    <div id="languageModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Language Settings</h2>
+            <select id="languageSelect">
+                <option value="en">English</option>
+                <option value="zh">中文</option>
+            </select>
+            <button id="saveLangBtn">Save</button>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="sidebar">
+            <ul>
+                <li><a href="stories" data-action="viewStories">Personal Stories</a></li>
+                <li><a href="shelter.html" data-action="viewShelters">Shelters</a></li>
+                <li><a href="needs" data-action="viewNeeds">Urgent Needs</a></li>
+                <li><a href="donations" data-action="viewDonations">How to Help</a></li>
+                <li><a href="homeless.html" data-action="homeless_list">Our Homeless</a></li>
+            </ul>
+        </div>
+        
+        <div class="main_content">
+            <div class="table_block">
+                <!-- Shelter Table -->
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Shelter ID</th>
+                            <th>Name</th>
+                            <th>Address</th>
+                            <th>Current</th>
+                            <th>Capacity</th>
+                            <th>Food Supply</th>
+                            <th>Clothing Supply</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for shelter in shelters %}
+                            <tr>
+                                <td>{{ shelter.id }}</td>
+                                <td>{{ shelter.name }}</td>
+                                <td>{{ shelter.address }}</td>
+                                <td>{{ shelter.current_occupancy }}</td>
+                                <td>{{ shelter.capacity }}</td>
+                                <td>{{ shelter.food_supply }}</td>
+                                <td>{{ shelter.clothing_supply }}</td>
+                                <td>
+                                    <button class="editShelterBtn"
+                                        data-id="{{ shelter.id }}"
+                                        data-name="{{ shelter.name }}"
+                                        data-address="{{ shelter.address }}"
+                                        data-capacity="{{ shelter.capacity }}"
+                                        data-current="{{ shelter.current_occupancy }}"
+                                        data-food="{{ shelter.food_supply }}"
+                                        data-clothing="{{ shelter.clothing_supply }}">
+                                        Edit
+                                    </button>
+                                    <button class="deleteShelterBtn" data-id="{{ shelter.id }}">Delete</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="action_buttons">
+                <button id="addShelterBtn">Add New Shelter</button>
+                <button id="viewShelterMapBtn">View Map</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Shelter Modal -->
+    <div id="addShelterModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>  
+            <h3>Add New Shelter</h3>
+            <form id="addShelterForm" action="/add_shelter" method="POST">
+                <label for="shelter_name">Name:</label>
+                <input type="text" id="addShelterName" name="shelter_name" required>
+                
+                <label for="address">Address:</label>
+                <input type="text" id="addShelterAddress" name="address" required>
+                
+                <label for="capacity">Capacity:</label>
+                <input type="number" id="addShelterCapacity" name="capacity" min="1" required>
+                
+                <label for="current_occupancy">Current Occupancy:</label>
+                <input type="number" id="addShelterCurrent" name="current_occupancy" min="0">
+                
+                <label for="food_supply">Food Supply:</label>
+                <select id="addShelterFood" name="food_supply">
+                    <option value="Sufficient">Sufficient</option>
+                    <option value="Moderate">Moderate</option>
+                    <option value="Low">Low</option>
+                </select>
+                
+                <label for="clothing_supply">Clothing Supply:</label>
+                <select id="addShelterClothing" name="clothing_supply">
+                    <option value="Sufficient">Sufficient</option>
+                    <option value="Moderate">Moderate</option>
+                    <option value="Low">Low</option>
+                </select>
+                
+                <button type="submit">Add Shelter</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Shelter Modal -->
+    <div id="editShelterModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Edit Shelter Information</h3>
+            <form id="editShelterForm" action="/edit_shelter" method="POST">
+                <input type="hidden" id="editShelterId" name="shelter_id">
+                
+                <label for="editShelterName">Name:</label>
+                <input type="text" id="editShelterName" name="shelter_name" required>
+                
+                <label for="editShelterAddress">Address:</label>
+                <input type="text" id="editShelterAddress" name="address" required>
+                
+                <label for="editShelterCapacity">Capacity:</label>
+                <input type="number" id="editShelterCapacity" name="capacity" min="1" required>
+                
+                <label for="editShelterCurrent">Current Occupancy:</label>
+                <input type="number" id="editShelterCurrent" name="current_occupancy" min="0">
+                
+                <label for="editShelterFood">Food Supply:</label>
+                <select id="editShelterFood" name="food_supply">
+                    <option value="Sufficient">Sufficient</option>
+                    <option value="Moderate">Moderate</option>
+                    <option value="Low">Low</option>
+                </select>
+                
+                <label for="editShelterClothing">Clothing Supply:</label>
+                <select id="editShelterClothing" name="clothing_supply">
+                    <option value="Sufficient">Sufficient</option>
+                    <option value="Moderate">Moderate</option>
+                    <option value="Low">Low</option>
+                </select>
+                
+                <button type="submit">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Shelter Modal -->
+    <div id="deleteShelterModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Confirm Shelter Deletion</h3>
+            <p>This action cannot be undone!</p>
+            <form id="deleteShelterForm" action="/delete_shelter" method="POST">
+                <input type="hidden" id="deleteShelterId" name="shelter_id">
+                <button type="submit">Confirm Delete</button>
+                <button type="button" id="deleteShelterCancel">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>© 2023 Homeless Assistance System</p>
+        <p>Contact: yzhe0128@student.monash.edu</p>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>

@@ -3,8 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Urgent Needs Management</title>
+    <title>Homeless Needs</title>
     <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .needs-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .needs-list li {
+            margin-bottom: 5px;
+        }
+        .urgent {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
     <div class="header">
@@ -20,30 +34,6 @@
         </div>
     </div>
 
-    <!-- Logout Modal -->
-    <div id="logoutModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Confirm Logout</h2>
-            <p>Are you sure you want to logout?</p>
-            <button id="logoutConfirm">Confirm</button>
-            <button id="logoutCancel">Cancel</button>
-        </div>
-    </div>
-    
-    <!-- Settings Modal -->
-    <div id="languageModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Language Settings</h2>
-            <select id="languageSelect">
-                <option value="en">English</option>
-                <option value="zh">中文</option>
-            </select>
-            <button id="saveLangBtn">Save</button>
-        </div>
-    </div>
-
     <div class="content">
         <div class="sidebar">
             <ul>
@@ -56,154 +46,96 @@
         
         <div class="main_content">
             <div class="table_block">
-                <!-- Urgent Needs Table -->
                 <table>
                     <thead>
                         <tr>
-                            <th>Need ID</th>
-                            <th>Item Name</th>
-                            <th>Category</th>
-                            <th>Quantity Needed</th>
-                            <th>Priority</th>
-                            <th>Shelter</th>
-                            <th>Actions</th>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Needed Food</th>
+                            <th>Needed Clothing</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for need in needs %}
+                        {% for person in homeless_people %}
                             <tr>
-                                <td>{{ need.id }}</td>
-                                <td>{{ need.item_name }}</td>
-                                <td>{{ need.category }}</td>
-                                <td>{{ need.quantity }}</td>
-                                <td>{{ need.priority }}</td>
-                                <td>{{ need.shelter.name if need.shelter else 'General' }}</td>
+                                <td>{{ person.id }}</td>
+                                <td>{{ person.name }}</td>
                                 <td>
-                                    <button class="editNeedBtn"
-                                        data-id="{{ need.id }}"
-                                        data-name="{{ need.item_name }}"
-                                        data-category="{{ need.category }}"
-                                        data-quantity="{{ need.quantity }}"
-                                        data-priority="{{ need.priority }}"
-                                        data-shelter="{{ need.shelter_id }}">
-                                        Edit
+                                    <ul class="needs-list">
+                                        {% for food in person.needed_food %}
+                                            <li class="{% if food.priority == 'High' %}urgent{% endif %}">
+                                                {{ food.name }} ({{ food.quantity }})
+                                            </li>
+                                        {% else %}
+                                            <li>No food needs</li>
+                                        {% endfor %}
+                                    </ul>
+                                </td>
+                                <td>
+                                    <ul class="needs-list">
+                                        {% for clothing in person.needed_clothing %}
+                                            <li class="{% if clothing.priority == 'High' %}urgent{% endif %}">
+                                                {{ clothing.name }} ({{ clothing.quantity }})
+                                            </li>
+                                        {% else %}
+                                            <li>No clothing needs</li>
+                                        {% endfor %}
+                                    </ul>
+                                </td>
+                                <td>
+                                    <button class="donateBtn" 
+                                        data-id="{{ person.id }}"
+                                        data-name="{{ person.name }}"
+                                        data-food="{{ person.needed_food|tojson|forceescape }}"
+                                        data-clothing="{{ person.needed_clothing|tojson|forceescape }}">
+                                        Donate
                                     </button>
-                                    <button class="deleteNeedBtn" data-id="{{ need.id }}">Delete</button>
                                 </td>
                             </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
-            
-            <div class="action_buttons">
-                <button id="addNeedBtn">Add New Need</button>
-                <button id="viewNeedsReportBtn">Generate Report</button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Add Need Modal -->
-    <div id="addNeedModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>  
-            <h3>Add New Urgent Need</h3>
-            <form id="addNeedForm" action="/add_need" method="POST">
-                <label for="item_name">Item Name:</label>
-                <input type="text" id="addNeedName" name="item_name" required>
-                
-                <label for="category">Category:</label>
-                <select id="addNeedCategory" name="category">
-                    <option value="Food">Food</option>
-                    <option value="Clothing">Clothing</option>
-                    <option value="Hygiene">Hygiene</option>
-                    <option value="Medical">Medical</option>
-                    <option value="Other">Other</option>
-                </select>
-                
-                <label for="quantity">Quantity Needed:</label>
-                <input type="number" id="addNeedQuantity" name="quantity" min="1" required>
-                
-                <label for="priority">Priority:</label>
-                <select id="addNeedPriority" name="priority">
-                    <option value="High">High</option>
-                    <option value="Medium">Medium</option>
-                    <option value="Low">Low</option>
-                </select>
-                
-                <label for="shelter_id">Shelter (optional):</label>
-                <select id="addNeedShelter" name="shelter_id">
-                    <option value="">General Need</option>
-                    {% for shelter in shelters %}
-                        <option value="{{ shelter.id }}">{{ shelter.name }}</option>
-                    {% endfor %}
-                </select>
-                
-                <button type="submit">Add Need</button>
-            </form>
         </div>
     </div>
 
-    <!-- Edit Need Modal -->
-    <div id="editNeedModal" class="modal">
+    <!-- Donation Modal -->
+    <div id="donationModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h3>Edit Urgent Need</h3>
-            <form id="editNeedForm" action="/edit_need" method="POST">
-                <input type="hidden" id="editNeedId" name="need_id">
+            <h3>Donate to <span id="donationPersonName"></span></h3>
+            <form id="donationForm" action="/submit_donation" method="POST">
+                <input type="hidden" id="donationPersonId" name="person_id">
                 
-                <label for="editNeedName">Item Name:</label>
-                <input type="text" id="editNeedName" name="item_name" required>
+                <div class="needs-display">
+                    <h4>Current Needs:</h4>
+                    <div id="foodNeeds"></div>
+                    <div id="clothingNeeds"></div>
+                </div>
                 
-                <label for="editNeedCategory">Category:</label>
-                <select id="editNeedCategory" name="category">
-                    <option value="Food">Food</option>
-                    <option value="Clothing">Clothing</option>
-                    <option value="Hygiene">Hygiene</option>
-                    <option value="Medical">Medical</option>
-                    <option value="Other">Other</option>
-                </select>
+                <div class="donation-options">
+                    <label><input type="checkbox" id="donateFood" name="donate_food"> Donate Food</label>
+                    <div id="foodOptions" style="display:none; margin-left:20px;">
+                        <!-- Food options will be populated here -->
+                    </div>
+                    
+                    <label><input type="checkbox" id="donateClothing" name="donate_clothing"> Donate Clothing</label>
+                    <div id="clothingOptions" style="display:none; margin-left:20px;">
+                        <!-- Clothing options will be populated here -->
+                    </div>
+                </div>
                 
-                <label for="editNeedQuantity">Quantity Needed:</label>
-                <input type="number" id="editNeedQuantity" name="quantity" min="1" required>
+                <div class="donor-info">
+                    <h4>Your Information:</h4>
+                    <label>Name: <input type="text" name="donor_name" required></label>
+                    <label>Email: <input type="email" name="donor_email" required></label>
+                    <label>Phone: <input type="tel" name="donor_phone"></label>
+                </div>
                 
-                <label for="editNeedPriority">Priority:</label>
-                <select id="editNeedPriority" name="priority">
-                    <option value="High">High</option>
-                    <option value="Medium">Medium</option>
-                    <option value="Low">Low</option>
-                </select>
-                
-                <label for="editNeedShelter">Shelter (optional):</label>
-                <select id="editNeedShelter" name="shelter_id">
-                    <option value="">General Need</option>
-                    {% for shelter in shelters %}
-                        <option value="{{ shelter.id }}">{{ shelter.name }}</option>
-                    {% endfor %}
-                </select>
-                
-                <button type="submit">Save Changes</button>
+                <button type="submit">Submit Donation</button>
             </form>
         </div>
-    </div>
-
-    <!-- Delete Need Modal -->
-    <div id="deleteNeedModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h3>Confirm Deletion</h3>
-            <p>Are you sure you want to delete this urgent need record?</p>
-            <form id="deleteNeedForm" action="/delete_need" method="POST">
-                <input type="hidden" id="deleteNeedId" name="need_id">
-                <button type="submit">Confirm Delete</button>
-                <button type="button" id="deleteNeedCancel">Cancel</button>
-            </form>
-        </div>
-    </div>
-
-    <div class="footer">
-        <p>© 2023 Homeless Assistance System</p>
-        <p>Contact: yzhe0128@student.monash.edu</p>
     </div>
 
     <script src="/static/script.js"></script>

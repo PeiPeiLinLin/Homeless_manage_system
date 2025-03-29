@@ -10,57 +10,59 @@
     <div class="header">
         <div class="logo">
             <a href="/" class="logo">
-                <img src="/static/image/下载.png" alt="Logo" > <!-- 替换为你的 logo 图片 -->
+                <img src="/static/image/图像.png" alt="Helping Hands Logo">
             </a>
         </div>
         <div class="side">
-            <div class="log"><p>当前用户：admin</p></div>
-            <div class="setting"><button id="settingBtn">设置</button></div>
-            <div class="log"><button id="logoutBtn">登出</button></div>
+            <div class="log"><p>Current User: admin</p></div>
+            <div class="setting"><button id="settingBtn">Settings</button></div>
+            <div class="log"><button id="logoutBtn">Log out</button></div>
+        </div>
+    </div>  
+
+     <!-- Logout Modal -->
+     <div id="logoutModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Log Out</h2>
+            <p>Are you sure you want to log out?</p>
+            <button id="logoutConfirm">Confirm</button>
+            <button id="logoutCancel">Cancel</button>
+        </div>
+    </div>
+    
+    <!-- Settings Modal -->
+    <div id="languageModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Choose a Language</h2>
+            <select id="languageSelect">
+                <option value="en">English</option>
+                <option value="zh">中文</option>
+            </select>
+            <button id="saveLangBtn">Save</button>
         </div>
     </div>
 
-    <!-- 模态框：登出 -->
-    <div id="logoutModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>确认登出</h2>
-            <p>您确定要登出吗？</p>
-            <button id="logoutConfirm">确认</button>
-            <button id="logoutCancel">取消</button>
-        </div>
-    </div>
-    <!-- 模态框 -->
-    <div id="languageModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>选择语言</h2>
-                <select id="languageSelect">
-                    <option value="en">English</option>
-                    <option value="zh">中文</option>
-                </select>
-                <button id="saveLangBtn">保存</button>
-            </div>
-    </div>
 
 
 
     <div class="content">
         <div class="sidebar">
             <ul>
-                <li><a href="students" data-action="viewStudents">查看学生列表</a></li>
-                <li><a href="classes" data-action="viewClasses">查看班级列表</a></li>
-                <li><a href="courses" data-action="viewCourses">查看课程列表</a></li>
-                <li><a href="scores" data-action="viewScores">查看成绩列表</a></li>
+                <li><a href="main.html" data-action="viewStories">Personal Stories</a></li>
+                <li><a href="shelter.html" data-action="viewShelters">Shelters</a></li>
+                <li><a href="needs.html" data-action="viewNeeds">Urgent Needs</a></li>
+                <li><a href="homeless.html" data-action="homeless_list">Our Homeless</a></li>
             </ul>
         </div>
         <div class="main">
-            <h2>请选择操作</h2>
-                <p id="mainText">点击左侧菜单按钮查看操作</p>
+            <h2>Operations</h2>
+                <p id="mainText">Click the side bar</p>
         </div>
     </div>
     <div class="footer">
-        <p>版权所有：学生管理系统</p>
+        <p>版权所有： Homeless管理系统</p>
         <p>如有需要请联系开发者：霖</p>
         <p>email: yzhe0128@student.monash.edu</p>
     </div>

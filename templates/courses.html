@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>查看班级列表</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body> 
+    <div class="header">
+        <div class="logo">
+            <a href="/" class="logo">
+                <img src="/static/image/下载.png" alt="Logo" > <!-- 替换为你的 logo 图片 -->
+            </a>
+        </div>
+        <div class="side">
+            <div class="log"><p>当前用户: admin</p></div>
+            <div class="setting"><button id="settingBtn">设置</button></div>
+            <div class="log"><button id="logoutBtn">登出</button></div>
+        </div>
+    </div>
+
+    
+    <!-- 模态框：登出 -->
+    <div id="logoutModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>确认登出</h2>
+            <p>您确定要登出吗？</p>
+            <button id="logoutConfirm">确认</button>
+            <button id="logoutCancel">取消</button>
+        </div>
+    </div>
+    <!-- 模态框: 设置 -->
+    <div id="languageModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>选择语言</h2>
+                <select id="languageSelect">
+                    <option value="en">English</option>
+                    <option value="zh">中文</option>
+
+                </select>
+                <button id="saveLangBtn">保存</button>
+            </div>
+    </div>
+
+
+
+    <div class="content">
+        <div class="sidebar">
+            <ul>
+                <li><a href="students" data-action="viewStudents">查看学生列表</a></li>
+                <li><a href="classes" data-action="viewClasses">查看班级列表</a></li>
+                <li><a href="courses" data-action="viewCourses">查看课程列表</a></li>
+                <li><a href="scores" data-action="viewScores">查看成绩列表</a></li>
+                <!-- <li><a href="#" data-action="deleteClass">删除班级</a></li> -->
+            </ul>
+        </div>
+        <div class="stu_tab">
+            <div class="table_block">
+                <!-- 学生表格 -->
+                <table class="">
+                    <thead>
+                        <tr>
+                            <th>课程ID</th>
+                            <th>课程姓名</th>
+                            <th>学分</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for course in courses %}
+                            <tr>
+                                <td>{{ course.id }}</td>  <!-- 课程ID -->
+                                <td>{{ course.name }}</td>  <!-- 课程姓名 -->
+                                <td>{{ course.credit }}</td>  <!-- 学分 -->
+                                <td>
+                                    <button class="editCourseBtn"
+                                    data-id="{{ course.id }}"
+                                    data-name="{{ course.name }}"
+                                    data-credit="{{ course.credit }}">编辑</button>
+                                    <button class="deleteCourseBtn"
+                                    data-id="{{ course.id }}">删除</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="adjustBtn">
+                <button id="addCoursesBtn">添加新班级</button>
+            </div>
+        </div>
+    </div>
+    <!-- 模态框：添加课程 -->
+<div id="addCourseModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>  
+        <h3>添加新课程</h3>
+        <form id="addCourseForm" action="/add_course" method="POST">
+            <label for="course_name">课程:</label>
+            <input type="text" id="addCourseName" name="course_name" required>
+            <br>
+            <label for="credit">学分:</label>
+            <input type="number" id="addCourseCredit" name="credit" min="1" required>
+            <br>
+            <button type="submit">添加</button>
+        </form>
+    </div>
+</div>
+
+<!-- 模态框：编辑课程 -->
+<div id="editCourseModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>编辑课程信息</h3>
+        <form id="editCourseForm" action="/edit_course" method="POST">
+            <input type="hidden" id="editCourseId" name="course_id">
+            <label for="editCourseName">课程:</label>
+            <input type="text" id="editCourseName" name="course_name" required>
+            <br>
+            <label for="editCourseCredit">学分:</label>
+            <input type="number" id="editCourseCredit" name="credit" min="1" required>
+            <br>
+            <button type="submit">保存</button>
+        </form>
+    </div>
+</div>
+
+<!-- 模态框：删除课程 -->
+<div id="deleteCourseModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>确定删除此课程吗？</h3>
+        <form id="deleteCourseForm" action="/delete_course" method="POST">
+            <input type="hidden" id="deleteCourseId" name="course_id">
+            <button type="submit">是</button>
+            <button type="button" id="deleteCancel">否</button>
+        </form>
+    </div>
+</div>
+
+    <div class="footer">
+
+        <p>版权所有：学生管理系统</p>
+        <p>如有需要请联系开发者：霖</p>
+        <p>email: yzhe0128@student.monash.edu</p>
+    </div>
+<script src="/static/script.js"></script>
+</body>
+</html>

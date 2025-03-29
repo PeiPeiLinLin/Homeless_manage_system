@@ -1,0 +1,290 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html, body {
+    height: 100%;
+    margin: 0;
+}
+body {
+    display: flex;
+    flex-direction: column;
+}
+.header{
+    display: flex;
+    justify-content:space-between;
+    height: 10%;
+    min-height: 60px;
+    /* background-color: aqua;  */
+    align-items: center;
+}
+.content{
+    display: flex;
+    justify-content: space-between;
+    height: 80%;
+    min-height: 60px;
+    /* background-color: blue;  */
+    align-items: center;
+}
+.footer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    height: 10%;
+    min-height: 60px;
+    /* background-color: red;  */
+    align-items: center;
+}
+.main{
+    display: flex;
+    flex-direction: column;
+    border: 30px solid cyan;
+    border-radius: 10px;
+    justify-content:center;
+    align-items:center;
+    height: 95%;
+    width: 80%;
+    /* background-color:darkorange;  */
+    text-align: center;
+    color: darkgray;
+}
+.sidebar{
+    display: flex;
+    flex-direction: column;
+    /* border: 30px solid blue; */
+    justify-content:flex-start;
+    align-items:flex-start;
+    height: 100%;
+    width: 20%;
+    /* background-color:pink;  */
+    text-align:left;
+    padding-top: 30px; 
+    padding-left: 50px;
+
+}
+.logo{
+    display: flex;
+    /* border: 10px solid yellow; */
+    justify-content: center;
+    align-items: center;
+    /* background-color: azure; */
+    height: 100%;
+    width: 300px;
+    
+    
+}
+.log, .setting{
+    margin-top: 15px;
+    margin-right: 30px;
+    display: flex; 
+    /* border: 10px solid purple; */
+    justify-content: center;
+    align-items: center;
+    /* background-color: red; */
+    height: 80%;
+    width: 100px; 
+    /* margin-left: auto; */
+    
+}
+.log p{
+    font-size: 17px;
+    border: 5px solid aqua;
+    border-radius: 10px;
+}
+.header button{
+    height: 100%;
+    width: 100%;
+    border-radius: 50px;
+}
+.header button:hover{
+    background-color: #ddd; 
+    text-decoration:underline;
+}
+.logo img{
+    height: 100%;
+}
+.side{
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    height: 100%;
+    width: 30%;
+}
+.sidebar ul li{
+    list-style-type: none;
+    width: 150%;
+
+}
+.sidebar li{
+    padding: 10%;
+    margin-bottom: 20px;
+    background-color: aliceblue;
+    border-radius: 10px;
+}
+.sidebar a{
+    text-decoration: none;  /* 去掉下划线 */
+    color: #333;            /* 可选：设置链接的颜色 */
+    font-size: 16px;        /* 可选：设置字体大小 */
+    padding: 5px 10px;      /* 可选：设置内边距 */
+    display: block;         /* 可选：让链接区域块级化，方便点击 */
+    border-radius: 5px;     /* 可选：设置圆角 */
+}
+.sidebar a:hover {
+    background-color: #ddd; 
+    text-decoration:underline;
+}
+.modal {
+    display: none; /* 默认隐藏 */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4); /* 背景遮罩 */
+    padding-top: 60px;
+}
+
+/* 模态框内容 */
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    border-radius: 10%;
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 20px;
+    border: 15px solid #888;
+    width: 80%; /* 可以调整 */
+    max-width: 400px;
+    min-height: 270px;
+}
+.modal-content h2{
+    font-size: 2rem;
+    color: #333;
+    text-align: center;
+    margin-bottom: 15px;
+}
+.modal-content button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 40%;
+    height: 10%;
+    border-radius: 5px;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+.modal-content button:hover{
+    background-color: #45a049;
+}
+.modal-content select {
+    width: 80%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+.modal-content p{
+    font-size: 1.2rem;
+    color: #333;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* 关闭按钮 */
+.close {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    position: relative;
+    bottom: 10px;
+    left: 150px;
+    
+}
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: grab;
+}
+.close:hover{
+    border-radius: 50px;
+    background-color: #ddd;
+}
+/* 设置按钮样式 */
+.setting button {
+    padding: 10px;
+    background-color: darkblue;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+/* 改变语言选择框的样式 */
+#languageSelect {
+    margin: 20px 0;
+    padding: 5px;
+}
+.stu_tab{
+    display: flex;
+    flex-direction: column;
+    border: 30px solid cyan;
+    border-radius: 10px;
+    justify-content:end;
+    align-items:end;
+    height: 95%;
+    width: 80%;
+    /* background-color:darkorange;  */
+    text-align: center;
+    color: darkgray;
+}
+.adjustBtn button{
+    margin: 10px 10px 20px 10px;
+    width: 100px;
+    height: 70px;
+    border-radius: 20px;
+}
+.adjustBtn button:hover{
+    background-color: #ddd;
+}
+.table_block{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 90%;
+}
+.adjustBtn{
+    display: flex;
+    flex-direction: row;
+}
+.table_block table{
+    border-collapse: collapse; /* 合并边框，避免双线 */
+    width: 100%; /* 可以根据需要调整表格宽度 */
+}
+/* 设置表格头部的字体颜色为黑色，并设置边框 */
+th, td {
+    border: 1px solid black; /* 黑色边框 */
+    text-align: left; /* 左对齐文本 */
+    padding: 8px; /* 单元格内边距，方便阅读 */
+    color: black; /* 黑色字体 */
+}
+/* 可选：为表头设置不同的背景颜色（比如灰色），让它和表格数据区分 */
+th {
+    background-color: #f2f2f2; /* 浅灰色背景 */
+}
+.table_block {
+    width: 100%;
+    max-height: 400px; /* 设置表格的最大高度 */
+    overflow-y: auto;  /* 启用垂直滚动条 */
+}
+.modal select{
+    width: 100px;
+}

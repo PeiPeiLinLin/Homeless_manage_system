@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>查看成绩列表</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body> 
+    <div class="header">
+        <div class="logo">
+            <a href="/" class="logo">
+                <img src="/static/image/下载.png" alt="Logo" > <!-- 替换为你的 logo 图片 -->
+            </a>
+        </div>
+        <div class="side">
+            <div class="log"><p>当前用户: admin</p></div>
+            <div class="setting"><button id="settingBtn">设置</button></div>
+            <div class="log"><button id="logoutBtn">登出</button></div>
+        </div>
+    </div>
+
+    
+    <!-- 模态框：登出 -->
+    <div id="logoutModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>确认登出</h2>
+            <p>您确定要登出吗？</p>
+            <button id="logoutConfirm">确认</button>
+            <button id="logoutCancel">取消</button>
+        </div>
+    </div>
+    <!-- 模态框: 设置 -->
+    <div id="languageModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>选择语言</h2>
+                <select id="languageSelect">
+                    <option value="en">English</option>
+                    <option value="zh">中文</option>
+                </select>
+                <button id="saveLangBtn">保存</button>
+            </div>
+    </div>
+
+
+    <div class="content">
+        <div class="sidebar">
+            <ul>
+                <li><a href="students" data-action="viewStudents">查看学生列表</a></li>
+                <li><a href="classes" data-action="viewClasses">查看班级列表</a></li>
+                <li><a href="courses" data-action="viewCourses">查看课程列表</a></li>
+                <li><a href="scores" data-action="viewScores">查看成绩列表</a></li>
+            </ul>
+        </div>
+        <div class="stu_tab">
+            <div class="table_block">
+                <!-- 学生表格 -->
+                <table>
+                    <thead>
+                        <tr>
+                            <th>学生ID</th>
+                            <th>学生姓名</th>
+                            <th>课程</th>
+                            <th>分数</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for score in scores %}
+                            <tr>
+                                <td>{{ score.student_id }}</td>  <!-- 学生ID -->
+                                <td>{{ score.name }}</td>  <!-- 学生姓名 -->
+                                <td>{{ score.course_name }}</td>  <!-- 成绩ID -->
+                                <td>{{ score.score }}</td>  <!-- 得分 -->
+                                <td>
+                                    <!-- 编辑成绩按钮 -->
+                                    <button class="editScoreBtn"
+                                    data-student_id="{{score.student_id}}"
+                                    data-course_id="{{score.course_id}}"
+                                    data-score="{{ score.score }}">
+                                    编辑
+                                    </button>
+
+                                    <!-- 删除成绩按钮 -->
+                                    <button class="deleteScoreBtn"
+                                    data-student_id="{{score.student_id}}"
+                                    data-course_id="{{score.course_id}}">
+                                    删除
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="adjustBtn">
+                <button id="addScoresBtn">添加新成绩</button>
+            </div>
+        </div>
+        <!-- 模态框：添加成绩 -->
+        <div id="addScoreModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>  
+                <h3>添加新成绩</h3>
+                <form id="addScoreForm" action="/add_score" method="POST">
+                    <label for="student_id">学生:</label>
+                    <select id="addStudentId" name="student_id" required>
+                        <!-- 通过后端动态生成学生选项 -->
+                        {% for student in students %}
+                            <option value="{{ student.id }}">{{ student.id }} {{ student.name }}</option>
+                        {% endfor %}
+                    </select>
+                    
+                    <label for="course_id">课程:</label>
+                    <select id="addCourseId" name="course_id" required>
+                        <!-- 通过后端动态生成课程选项 -->
+                        {% for course in courses %}
+                            <option value="{{ course.id }}">{{ course.id }} {{ course.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+                    <label for="score">成绩:</label>
+                    <input type="number" id="addScore" name="score" required>
+                    <br>
+                    <button type="submit">添加</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 模态框：编辑成绩 -->
+        <div id="editScoreModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h3>编辑成绩信息</h3>
+                <form id="editScoreForm" action="/edit_score" method="POST">
+                    <input type="hidden" id="editStudentId" name="student_id">
+                    <input type="hidden" id="editCourseId" name="course_id">
+                    <label for="editScore">成绩:</label>
+                    <input type="number" id="editScoreScore" name="score">
+                    <br>
+                    <button type="submit">保存</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 模态框：删除成绩 -->
+        <div id="deleteScoreModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h3>确定删除此成绩吗？</h3>
+                <form id="deleteScoreForm" action="/delete_score" method="POST">
+                    <input type="hidden" id="deleteStudentId" name="student_id">
+                    <input type="hidden" id="deleteCourseId" name="course_id">
+                    <button type="submit">是</button>
+                    <button type="button" id="deleteCancel">否</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+
+    <div class="footer">
+
+        <p>版权所有：学生管理系统</p>
+        <p>如有需要请联系开发者：霖</p>
+        <p>email: yzhe0128@student.monash.edu</p>
+    </div>
+<script src="/static/script.js"></script>
+</body>
+</html>

@@ -36,6 +36,35 @@
 			height: 200px;
 			object-fit: cover;
 		}
+
+		.tag {
+			background-color: #eee;
+			color: 	#333;
+			font-size: 0.75rem;
+			padding: 3px 10px;
+			border-radius: 12px;
+			margin: 5px 5px 0 0;
+			display: inline-block;
+		}
+
+		.story-content em {
+			color: #555;
+			font-style: italic;
+			display: block;
+			margin-bottom: 10px;
+		}
+
+		#storyForm .form-field {
+			margin-bottom: 1em;
+		}
+
+		#storyForm input, #storyForm textarea {
+			width: 100%;
+			padding: 0.6em;
+			border-radius: 6px;
+			border: 1px solid #ccc;
+		}
+
 		.story-content {
 			padding: 15px;
 		}
@@ -90,7 +119,11 @@
 	<div id="wrapper">
 		<!-- Login Header -->
 		<div class="login-header">
+<<<<<<< HEAD
+			<a href="login.html" class="button" id="loginBtn">Shelter Admin Login</a>
+=======
 			<button id="loginBtn" class="button"><a href="login.html">Shelter Admin Login</a></button>
+>>>>>>> a6a2526f115e66ec53ea0dd1cf1240d801e2e27d
 			<div id="adminControls" class="admin-only">
 				<a href="/admin" class="button">Dashboard</a>
 				<button id="logoutBtn" class="button">Logout</button>
@@ -118,12 +151,17 @@
 
 		<!-- Main Header -->
 		<header id="header" class="alt">
-			<span class="logo"><img src="images/logo.svg" alt="" /></span>
-			<h1>Homes R Us</h1>
+			<span class="logo"><img src="static/image/图像.png" alt="" /></span>
+			<h1 class=“logo-heading“>
+ 			<img src ="static/image/图像.png">
+			</h1>
 			<p>Finding connections with people of the less fortunate<br>Built by: 
 				<a href="https://www.instagram.com/nsxts/">@Zonetian</a>, 
 				<a href="https://www.instagram.com/yz.8102/">@Yixuan</a>, 
-				<a href="https://www.instagram.com/linn.03_/">@Adrian</a>
+				<a href="https://www.instagram.com/linn.03_/">@Adrian</a>,
+				<a href="https://www.instagram.com/birdy_windyabc/">@Wing</a>
+				
+
 			</p>
 		</header>
 
@@ -183,25 +221,30 @@
 					<p>Share another story from your shelter</p>
 				</header>
 				<form id="storyForm">
-					<div>
+					<div class="form-field">
 						<label for="storyName">Name:</label>
 						<input type="text" id="storyName" required>
 					</div>
-					<div>
+					<div class="form-field">
 						<label for="storyTitle">Title:</label>
 						<input type="text" id="storyTitle" required>
 					</div>
-					<div>
+					<div class="form-field">
 						<label for="storyContent">Story:</label>
 						<textarea id="storyContent" rows="5" required></textarea>
 					</div>
-					<div>
+					<div class="form-field">
 						<label for="storyImage">Image URL:</label>
 						<input type="text" id="storyImage" required>
+					</div>
+					<div class="form-field">
+						<label for="storyTags">Tags (comma separated):</label>
+						<input type="text" id="storyTags" placeholder="e.g. mother,resilience,jobloss">
 					</div>
 					<button type="submit" class="button primary">Submit Story</button>
 				</form>
 			</section>
+			
 
 			<!-- How to Help Section -->
 			<section id="help" class="main special">
@@ -244,32 +287,55 @@
 		</div>
 
 		<!-- Footer -->
-		<footer id="footer">
-			<section>
-				<h2>About Homes R Us</h2>
-				<p>We are a nonprofit organization dedicated to bridging the gap between the housed and unhoused communities through storytelling, advocacy, and direct assistance.</p>
-				<ul class="actions">
-					<li><a href="#" class="button">Learn More</a></li>
-				</ul>
-			</section>
-			<section>
-				<h2>Contact Us</h2>
-				<dl class="alt">
-					<dt>Address</dt>
-					<dd>1234 Compassion Way &bull; Your City, ST 00000 &bull; USA</dd>
-					<dt>Phone</dt>
-					<dd>(555) 123-4567</dd>
-					<dt>Email</dt>
-					<dd><a href="#">help@homesrus.org</a></dd>
-				</dl>
-				<ul class="icons">
-					<li><a href="#" class="icon brands fa-twitter alt"><span class="label">Twitter</span></a></li>
-					<li><a href="#" class="icon brands fa-facebook-f alt"><span class="label">Facebook</span></a></li>
-					<li><a href="#" class="icon brands fa-instagram alt"><span class="label">Instagram</span></a></li>
-				</ul>
-			</section>
-			<p class="copyright">&copy; Homes R Us. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+
+		<!-- Footer -->
+		<footer id="footer" style="padding: 3em 2em; color: #fff;">
+			<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2em;">
+				
+				<!-- About -->
+				<section style="flex: 1 1 250px;">
+					<h3><i class="fas fa-home"></i> About Homes R Us</h3>
+					<p>We are a nonprofit organisation bridging the gap between the housed and unhoused through storytelling, connection, and action.</p>
+					<p style="font-weight: 600;">Every voice matters. Share. Connect. Help.</p>
+				</section>
+
+				<!-- Contact Info -->
+				<section style="flex: 1 1 250px;">
+					<h3><i class="fas fa-envelope"></i> Contact Us</h3>
+					<dl class="alt">
+						<dt>Address</dt>
+						<dd>1234 Compassion Way<br>Your City, ST 00000</dd>
+						<dt>Phone</dt>
+						<dd>(555) 123-4567</dd>
+						<dt>Email</dt>
+						<dd><a href="mailto:help@homesrus.org" style="color: #ffd;">help@homesrus.org</a></dd>
+					</dl>
+					<ul class="icons" style="margin-top: 1em;">
+						<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+						<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+						<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+					</ul>
+				</section>
+
+				<!-- Newsletter -->
+				<section style="flex: 1 1 250px;">
+					<h3><i class="fas fa-newspaper"></i> Stay Connected</h3>
+					<p>Subscribe to get the latest stories and ways you can help.</p>
+					<form id="subscribeForm">
+						<input type="email" name="email" placeholder="Your email" required style="padding: 0.6em; width: 100%; border-radius: 5px; border: none; margin-bottom: 1em;">
+						<button type="submit" class="button primary small">Subscribe</button>
+					</form>
+					<p style="margin-top: 1em;"><strong>📖 Total Stories Shared:</strong> <span id="storyCount">0</span></p>
+				</section>
+			</div>
+			<hr style="margin-top: 2em; margin-bottom: 1em;">
+			<p style="text-align: center; font-size: 0.9em;">&copy; 2025 Homes R Us. Design inspired by <a href="https://html5up.net" target="_blank" style="color: #ffd;">HTML5 UP</a>. All rights reserved.</p>
 		</footer>
+
+
+
+
+
 	</div>
 
 	<!-- Scripts -->
@@ -366,6 +432,9 @@
 		function loadStories() {
 			const container = $('#storiesContainer');
 			container.empty();
+			updateStoryCount();
+			
+
 			
 			// In a real app, this would fetch from your SQL database via API
 			stories.forEach(story => {
@@ -380,7 +449,8 @@
 						<img src="${story.image}" alt="${story.name}'s story" class="story-image">
 						<div class="story-content">
 							<h3>${story.title}</h3>
-							<p>${story.content}</p>
+							<p><em>"${story.content.split(' ').slice(0, 15).join(' ')}..."</em></p>
+
 							<button class="like-btn ${story.isLiked ? 'liked' : ''}" data-id="${story.id}">
 								<i class="fas fa-heart"></i>
 								<span class="like-count">${story.likes}</span>
@@ -467,6 +537,36 @@
 			$('body').removeClass('logged-in');
 			loadStories();
 		}
+
+		// Newsletter subscription alert
+		document.getElementById("subscribeForm").addEventListener("submit", function (e) {
+			e.preventDefault();
+			alert("Thank you for subscribing!");
+			this.reset();
+		});
+
+		// Story counter auto-update
+		function updateStoryCount() {
+			document.getElementById("storyCount").innerText = stories.length;
+		}
+
+		// Footer background changes based on time
+		function updateFooterTheme() {
+			const hour = new Date().getHours();
+			const footer = document.getElementById("footer");
+			if (hour >= 6 && hour <= 18) {
+				footer.style.backgroundColor = "#444"; // 白天亮色
+				footer.style.color = "#fff";
+			} else {
+				footer.style.backgroundColor = "#1a1a2e"; // 夜晚深藍
+				footer.style.color = "#fff";
+			}
+		}
+
+		// Run on page load
+		updateStoryCount();
+		updateFooterTheme();
+
 	</script>
 </body>
 </html>

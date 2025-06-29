@@ -1,27 +1,22 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 import mysql.connector
-import cx_Oracle  # Oracle database connector
 
 app = Flask(__name__)
 
 # 数据库连接(success)
 def get_db_connection():
-    try:
-        # Oracle connection string format: username/password@hostname:port/service_name
-        connection = cx_Oracle.connect(
-            user='yzhe0128',
-            password='student',
-            dsn='localhost:1521/HOME_ARE_US'  # Assuming default port 1521
-        )
-        return connection
-    except cx_Oracle.DatabaseError as e:
-        print(f"Database connection failed: {e}")
-        raise
+    connection = mysql.connector.connect(
+        host='localhost',
+        user='root',  # 替换为你的数据库用户名
+        password='Zheng050517',  # 替换为你的数据库密码
+        database='student_management'  # 替换为你的数据库名称
+    )
+    return connection
   
 # 默认路由跳转到登录页面
 @app.route('/')
 def login_page():
-    return render_template('main.html')  # 显示登录页面
+    return render_template('login.html')  # 显示登录页面
 
 # 登录页面的处理路由
 @app.route('/login', methods=['POST'])
@@ -40,7 +35,7 @@ def login():
 def logout():
     # 清除session，登出
     session.pop('username', None)
-    return redirect(url_for('main'))  # 跳转到登录页面
+    return redirect(url_for('index'))  # 跳转到登录页面
 
 # 主页面
 @app.route('/index')
@@ -48,15 +43,15 @@ def index_page():
     return render_template('index.html')  # 渲染主页面
 
 
-# 以下是homeless表的操作
-@app.route('/homeless')
+# 以下是学生表的操作
+@app.route('/students')
 def students():
     # 从数据库查询学生信息
     connection = get_db_connection()
     cursor = connection.cursor(dictionary=True)
     cursor.execute("""
-        SELECT h.id, h.name AS homeless_name, s.age, s.class_id, s.score, c.name AS class_name
-        FROM homeless h
+        SELECT s.id, s.name AS student_name, s.age, s.class_id, s.score, c.name AS class_name
+        FROM students s
         JOIN classes c ON s.class_id = c.id
         ORDER BY s.id ASC
     """)  # 获取学生信息和班级名称
